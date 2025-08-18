@@ -13,5 +13,16 @@ public class FunComands {
             }
         }
     }
+    public static void adventofcodetype(int n) {
+        // n is number of lines in Christmas tree
+        String local_line="";
+
+        for (int i=0; i<n; i++){
+            local_line=" ".repeat(n-i) + "*".repeat(1+i*2);
+            FunComands.say(local_line);
+
+        }
+
+    }
 
 }
