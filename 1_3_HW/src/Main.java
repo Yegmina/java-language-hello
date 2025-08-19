@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        QuadraticEquationSolver.main(args);
+        BinaryValues.main(args);
 
 
     }
