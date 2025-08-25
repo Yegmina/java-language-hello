@@ -8,6 +8,7 @@ public class MaxSubArray {
         int[] arr = new int[n];
         System.out.println("Enter the elements you want in the array line by line: ");
         for (int i = 0; i < n; i++) {
+            System.out.print("Enter integer: ");
             arr[i] = Integer.parseInt(scanner.nextLine());
         }
         Result result = getMaxSumSubArray(arr);
