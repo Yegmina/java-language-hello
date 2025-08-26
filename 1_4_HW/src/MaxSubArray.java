@@ -41,7 +41,7 @@ public class MaxSubArray {
         return new Result(maxSum, startIndex, endIndex);
     }
 
-    static class Result {
+    static class Result { //inner class
         int maxSum;
         int startIndex;
         int endIndex;
