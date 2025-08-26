@@ -24,12 +24,15 @@ public class Television {
     }
 
     public void printWatchinChannel(){
+        if (!isOn()) return;
         System.out.println("Watching channel "+ getChannel());
     }
     public void setNextChannel() {
+        if (!isOn()) return;
         setCurrentChannel(getChannel()+1);
     }
     public void setPreviousChannel() {
+        if (!isOn()) return;
         setCurrentChannel(getChannel()-1);
     }
     public boolean isOn(){
