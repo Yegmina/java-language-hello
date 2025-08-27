@@ -4,7 +4,6 @@ import java.util.Map;
 public class GroceryListManager {
     private HashMap<String, Double> groceryList;
     private final HashMap<String, String> categoryMap;
-    // NEW for 2.2.4
     private final HashMap<String, Integer> quantityMap;
 
     public GroceryListManager() {
@@ -30,7 +29,6 @@ public class GroceryListManager {
         categoryMap.put(item, category);
     }
 
-    //new for 2.2.3
     public void addItem(String item, double cost, String category, int quantity) {
         if (cost < 0) {
             System.out.println("Invalid Cost for " + item + "; not added");
@@ -45,7 +43,6 @@ public class GroceryListManager {
         quantityMap.put(item, quantity);
     }
 
-    // remove from all maps in memory, every part
     public void removeItem(String item) {
         if (groceryList.remove(item) != null) {
             categoryMap.remove(item);
@@ -67,7 +64,10 @@ public class GroceryListManager {
             Double cost     = entry.getValue();
             String category = categoryMap.get(name);
             System.out.println(
-                    i++ + ". " + name + " - " + String.format("%.2f", cost)+ (category != null ? " [" + category + "]" : "")
+                    i++
+                            + ". " + name
+                            + " - " + String.format("%.2f", cost) + " $"
+                            + (category != null ? " [" + category + "]" : "")
             );
         }
     }
@@ -76,10 +76,13 @@ public class GroceryListManager {
         return groceryList.containsKey(item);
     }
 
+
     public double calculateTotalCost() {
         double total = 0.0;
-        for (double cost : groceryList.values()) {
-            total += cost;
+        for (String name : groceryList.keySet()) {
+            double cost = groceryList.get(name);
+            int qty     = quantityMap.getOrDefault(name, 1);
+            total += cost * qty;
         }
         return total;
     }
@@ -95,7 +98,12 @@ public class GroceryListManager {
                     System.out.println("Items in category \"" + category + "\":");
                 }
                 count++;
-                System.out.println( "  " + count + ". " + name + " - " + String.format("%.2f", cost)+"$");
+                System.out.println(
+                        "  " + count
+                                + ". " + name
+                                + " - " + String.format("%.2f", cost) + " $"
+                                + " (qty: " + quantityMap.getOrDefault(name, 1) + ")"
+                );
             }
         }
         if (count == 0) {
@@ -103,7 +111,6 @@ public class GroceryListManager {
         }
     }
 
-    // new for 2.2.4
     public void updateQuantity(String item, int newQuantity) {
         if (!groceryList.containsKey(item)) {
             System.out.println(item + " not found; cannot update quantity.");
@@ -117,8 +124,7 @@ public class GroceryListManager {
         System.out.println(item + " quantity updated to " + newQuantity);
     }
 
-//new 2.2.4
-        public void displayAvailableItems() {
+    public void displayAvailableItems() {
         int count = 0;
         for (String name : groceryList.keySet()) {
             Integer qty = quantityMap.get(name);
@@ -138,6 +144,7 @@ public class GroceryListManager {
     public HashMap<String, Double> getGroceryList() {
         return groceryList;
     }
+
     public void setGroceryList(HashMap<String, Double> newList) {
         this.groceryList = new HashMap<>(newList);
         this.categoryMap.clear();
@@ -147,27 +154,27 @@ public class GroceryListManager {
     public static void main(String[] args) {
         GroceryListManager myList = new GroceryListManager();
 
-        myList.addItem("Apple",   1.29, "Fruits",  5);
-        myList.addItem("Banana",  0.59, "Fruits", 10);
-        myList.addItem("Milk",    2.49, "Dairy",   0);
-        myList.addItem("Cheese",  3.99, "Dairy",   2);
-        myList.addItem("Bagel",   1.49, "Bakery",  4);
+        myList.addItem("Apple",   1.29, "Fruits",  5);  // 1.29 * 5 =  6.45
+        myList.addItem("Banana",  0.59, "Fruits", 10);  // 0.59 *10 =  5.90
+        myList.addItem("Milk",    2.49, "Dairy",   0);  // 2.49 * 0 =  0.00
+        myList.addItem("Cheese",  3.99, "Dairy",   2);  // 3.99 * 2 =  7.98
+        myList.addItem("Bagel",   1.49, "Bakery",  4);  // 1.49 * 4 =  5.96
 
-        System.out.println("Full list:");
+        System.out.println("-=Full list=-");
         myList.displayList();
 
-        System.out.println("\nTotal cost: "
+        System.out.println("\nTotal cost (with quantities): "
                 + String.format("%.2f", myList.calculateTotalCost()) + " $"
         );
 
         System.out.println();
         myList.displayByCategory("Fruits");
         myList.displayByCategory("Bakery");
-        System.out.println();
+        myList.displayByCategory("Meat");  // 0
 
-        System.out.println("Updating quantities...");
+        System.out.println("\nUpdating quantities…");
         myList.updateQuantity("Milk", 3);
-        myList.updateQuantity("Eggs",  6);  // 0
+        myList.updateQuantity("Eggs",  6);
 
         System.out.println();
         myList.displayAvailableItems();
